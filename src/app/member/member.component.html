@@ -1,0 +1,121 @@
+<h4>New Angular Application</h4>
+
+<button type="button" class="btn btn-primary" (click)="openModal(template)">Add New Member</button>
+<br><br>
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Adding New Member</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" [formGroup]="createform" (ngSubmit)="onSubmit(createform.value)">
+      <div class="form-group">
+        <div class="col-sm-12">
+          <label class="control-label">Name</label>
+          <input type="text" id="MemberName" class="form-control" formControlName="memberName">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-12">
+          <label class="control-label">Email</label>
+          <input type="email" id="MemberEmail" class="form-control" formControlName="memberEmail">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-12">
+          <label class="control-label">Location</label>
+          <input type="text" id="address" class="form-control" formControlName="address">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]=!createform.valid (click)="modalRef.hide()"> Submit</button>
+
+    </form>
+  </div>
+</ng-template>
+<div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Location</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let post of posts">
+      <tr scope="row">
+        <td>{{post.memId}}</td>
+        <td>{{post.memberName}} </td>
+        <td>{{post.memberEmail}}</td>
+        <td>{{post.address}} </td>
+        <td>
+          <button type="button" value="Update" class="btn btn-warning" (click)='openModalforEdit(updatemember,post);'>Update</button>
+          <ng-template #updatemember>
+            <div class="modal-header">
+              <h4 class="modal-title pull-left">Updating Current Member</h4>
+              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+            </div>
+            <div class="modal-body">
+              <form action="POST" [formGroup]="editform" (ngSubmit)="editUser(editform.value)">
+
+                <div class="form-group">
+                  <div class="col-sm-12">
+ <input style="display:none;" class="form-control" type="text" [(ngModel)]="post.memId" [formControl]="editform.controls['memId']">
+
+                    <label class="control-label">Name</label>
+                    <input type="text" id="memberName" [(ngModel)]="post.memberName" class="form-control" formControlName="memberName">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <label class="control-label">Email</label>
+                    <input type="text" id="memberEmail" [(ngModel)]="post.memberEmail" class="form-control" formControlName="memberEmail">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <label class="control-label">Location</label>
+                    <input type="text" id="address" [(ngModel)]="post.address" class="form-control" formControlName="address">
+                  </div>
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-success" (click)="modalRef.hide()"> Submit</button>
+                </div>
+
+              </form>
+            </div>
+          </ng-template>
+          <button type="button" value="Delete" class="btn btn-danger" (click)='openModalforDelete(deletemember,post)'>Delete</button>
+          <ng-template #deletemember>
+            <div class="modal-header">
+              <h4 class="modal-title pull-left">Deleting Current User</h4>
+              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+            </div>
+              <form [formGroup]="deleteform" (ngSubmit)="deleteUser(deleteform.value)">
+
+            <div class="modal-body">
+              Are you sure you want to remove this ?
+              <textarea cols="20" rows="20" style="display:none;" [(ngModel)]="post.memId" [formControl]="deleteform.controls['memId']"></textarea>
+            </div>
+            <div class="submitbtn">
+              <button class="btn btn-primary delete" (click)="modalRef.hide()">Remove</button>
+            </div>
+          </form>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
